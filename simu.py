@@ -109,7 +109,6 @@ def run(N, M, TF, log=True):
     STO = [0] * N
     STOI = [0] * M
     PTO = [HV] * N
-    PTOI = [HV] * M
     T = 0
 
     while T <= TF or NS > 0:
@@ -162,7 +161,7 @@ def run(N, M, TF, log=True):
                 else:
                     TPSI[j] = HV
                     ITOI[j] = T
-            else:    
+            else:
                 # salida fijos
                 T = TPS[i]
                 STS += T
@@ -195,7 +194,7 @@ def run(N, M, TF, log=True):
         if M > 0:
             print(f'Tiempos de atención en intermitentes: {STAI} segundos')
 
-    return N, TF, PTO, PA, PEC
+    return N, TF, PTO, PA, PEC, STAI, STA
 
 
 def run_n_times(N, M, TF, n):
@@ -216,3 +215,13 @@ def run_n_times(N, M, TF, n):
     PECS = [result[4] for result in results]
     PEC_MEAN = sum(PECS) / len(PECS)
     print(f'Promedio de espera en cola: {PEC_MEAN} segundos')
+
+    if M > 0:
+        print(f'Tiempos y % de atención en intermitentes')
+        for l in range(0, M):
+            STAIS = [result[5][l] for result in results]
+            STAIO_MEAN = sum(STAIS) / len(STAIS)
+            STAS = [result[6] for result in results]
+            STA_MEAN = sum(STAS) / len(STAS)
+            print(f'Puesto {l}: {STAIO_MEAN} segundos {STAIO_MEAN*100/STA_MEAN}%')
+
