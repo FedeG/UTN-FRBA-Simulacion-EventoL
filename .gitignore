@@ -1,0 +1,25 @@
+# IDEs and editors
+.vscode
+
+# Python and Django
+*.pyc
+__pycache__
+*.sqlite3
+media/
+
+# frontend
+**/node_modules
+webpack-stats.json
+pnpm-debug.log
+yarn.lock
+package-lock.json
+report.html
+coverage/
+bundles/
+
+# environment
+.env
+
+# pnpm
+pnpm-debug.log
+.pnpm-store/
