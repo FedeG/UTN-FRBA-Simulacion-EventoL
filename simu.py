@@ -200,7 +200,7 @@ def run(N, M, TF, log=True):
 
 def run_n_times(N, M, TF, n):
     # results = [(N, TF, PTO, PA, PEC)]
-    results = [run(N, M, TF, log=True) for _ in range(n)]
+    results = [run(N, M, TF, log=False) for _ in range(n)]
 
     print(f'La variable de control es: {N}')
     print(f'Porcentaje de tiempo ocioso por puesto')
