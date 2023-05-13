@@ -89,14 +89,11 @@ def usa_intermitente(NS, N):
     return NS - N >= 2
 
 
-def intermitentes_ocupados(tpsi):
-    return len([tps for tps in tpsi if tps != HV])
-
-
 def run(N, M, TF, log=True):
     TPLL = get_primera_llegada()
     TPS = [HV] * N
     TPSI = [HV] * M
+    CPIO = 0
     NS = 0
     NT = 0
     AR = 0
@@ -123,7 +120,7 @@ def run(N, M, TF, log=True):
             IA = get_IA()
             TPLL += IA
 
-            arrepentimiento = get_arrepentimiento(NS, N + intermitentes_ocupados(TPSI))
+            arrepentimiento = get_arrepentimiento(NS, N + CPIO)
             if arrepentimiento:
                 AR += 1
                 continue
@@ -132,20 +129,21 @@ def run(N, M, TF, log=True):
             NT += 1
             STLL += T
 
-            if NS <= N + intermitentes_ocupados(TPSI):
+            if NS <= N + CPIO:
                 k = get_puesto_ocioso_hace_mas_tiempo(TPS, ITO)
                 TA = get_TA()
-                TPS[k] = T + TA+ intermitentes_ocupados(TPSI)
+                TPS[k] = T + TA+ CPIO
                 STO[k] = STO[k] + (T - ITO[k])
                 STA += TA
-            elif M > 0 and usa_intermitente(NS, N + intermitentes_ocupados(TPSI)) and NS <= N + M + 2:
-                if len([tps for tps in TPSI if tps == HV]) > 0:
+            elif M > 0 and usa_intermitente(NS, N + CPIO) and NS <= N + M + 2:
+                if M - CPIO > 0:
                     k = get_puesto_ocioso_hace_mas_tiempo(TPSI, ITOI)
                     TA = get_TA()
                     TPSI[k] = T + TA
                     STOI[k] = STOI[k] + (T - ITOI[k])
                     STA += TA
                     STAI[k] += TA
+                    CPIO += 1
         else:
             # salida
             if M > 0 and TPSI[j] <= TPS[i]:
@@ -153,11 +151,13 @@ def run(N, M, TF, log=True):
                 T = TPSI[j]
                 STS += T
                 NS -= 1
+                CPIO -= 1
 
-                if usa_intermitente(NS, N + intermitentes_ocupados(TPSI) - 1):
+                if usa_intermitente(NS, N + CPIO - 1):
                     TA = get_TA()
                     TPSI[j] = T + TA
                     STA += TA
+                    CPIO += 1
                 else:
                     TPSI[j] = HV
                     ITOI[j] = T
@@ -167,7 +167,7 @@ def run(N, M, TF, log=True):
                 STS += T
                 NS -= 1
 
-                if NS >= N + intermitentes_ocupados(TPSI):
+                if NS >= N + CPIO:
                     TA = get_TA()
                     TPS[i] = T + TA
                     STA += TA
@@ -224,4 +224,3 @@ def run_n_times(N, M, TF, n):
             STAS = [result[6] for result in results]
             STA_MEAN = sum(STAS) / len(STAS)
             print(f'Puesto {l}: {STAIO_MEAN} segundos {STAIO_MEAN*100/STA_MEAN}%')
-
