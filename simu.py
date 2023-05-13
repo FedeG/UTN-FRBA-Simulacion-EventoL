@@ -93,7 +93,7 @@ def run(N, M, TF, log=True):
     TPLL = get_primera_llegada()
     TPS = [HV] * N
     TPSI = [HV] * M
-    CPO = 0
+    CPIO = 0
     NS = 0
     NT = 0
     AR = 0
@@ -120,7 +120,7 @@ def run(N, M, TF, log=True):
             IA = get_IA()
             TPLL += IA
 
-            arrepentimiento = get_arrepentimiento(NS, N + CPO)
+            arrepentimiento = get_arrepentimiento(NS, N + CPIO)
             if arrepentimiento:
                 AR += 1
                 continue
@@ -129,21 +129,21 @@ def run(N, M, TF, log=True):
             NT += 1
             STLL += T
 
-            if NS <= N + CPO:
+            if NS <= N + CPIO:
                 k = get_puesto_ocioso_hace_mas_tiempo(TPS, ITO)
                 TA = get_TA()
-                TPS[k] = T + TA+ CPO
+                TPS[k] = T + TA+ CPIO
                 STO[k] = STO[k] + (T - ITO[k])
                 STA += TA
-            elif M > 0 and usa_intermitente(NS, N + CPO) and NS <= N + M + 2:
-                if M - CPO > 0:
+            elif M > 0 and usa_intermitente(NS, N + CPIO) and NS <= N + M + 2:
+                if M - CPIO > 0:
                     k = get_puesto_ocioso_hace_mas_tiempo(TPSI, ITOI)
                     TA = get_TA()
                     TPSI[k] = T + TA
                     STOI[k] = STOI[k] + (T - ITOI[k])
                     STA += TA
                     STAI[k] += TA
-                    CPO += 1
+                    CPIO += 1
         else:
             # salida
             if M > 0 and TPSI[j] <= TPS[i]:
@@ -151,13 +151,13 @@ def run(N, M, TF, log=True):
                 T = TPSI[j]
                 STS += T
                 NS -= 1
-                CPO -= 1
+                CPIO -= 1
 
-                if usa_intermitente(NS, N + CPO - 1):
+                if usa_intermitente(NS, N + CPIO - 1):
                     TA = get_TA()
                     TPSI[j] = T + TA
                     STA += TA
-                    CPO += 1
+                    CPIO += 1
                 else:
                     TPSI[j] = HV
                     ITOI[j] = T
@@ -167,7 +167,7 @@ def run(N, M, TF, log=True):
                 STS += T
                 NS -= 1
 
-                if NS >= N + CPO:
+                if NS >= N + CPIO:
                     TA = get_TA()
                     TPS[i] = T + TA
                     STA += TA
